@@ -1,0 +1,26 @@
+cara setting access point
+- reset access point
+- setting ip di adapter setting
+- masuk web brower ketikan ip default AP
+- akan masuk ke interface klik exit
+- masuk ke tab network
+- lalu isikan gateway dan ip addres
+- reboot AP
+- buka adapter setting dan sesuaikan ip yg diganti tadi
+- lalu buka di browser dengan ip yg anda isikan tadi
+- sudah masuk interface, klik exit lalu masuk ke tab wirelles - wirelles setting
+- ubah nama dan region
+- klik save dan reboot AP
+- masuk ke interface dan klik exit
+- masuk ke tab wirelless - wirelless security
+- pilih akses yang ingin kalian gunakan
+- save reboot
+- masuk ke interface klik exit
+- masuk ke tab dhcp
+- isikan default gateway sesuai yang di tentukan, dan isi dns nya.
+- klik save reboot
+- masuk ke interface klik exit
+- klik tab system tool - password
+- lalu ganti
+- klik save dan apabila disuruh masukan pass dan user baru dan login.
+- close browser
