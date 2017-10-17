@@ -35,3 +35,4 @@ link test buat download mikrotik
 http://www.routeros.co.id/?act=preview&versi=6.33&nf=mikrotik-6.33.iso&key=9d8d81f60c61c94c09d78be766c21a76
 
 	
+
