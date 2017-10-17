@@ -1,0 +1,78 @@
+----------------cara setting hotspot beserta login--------------------
+NOTE : pastikan sudah setting atau konfigurasi ip-gateway
+- buka winbox dan klik interface lalu klik wlan1 dan pilih tanda centang dibawah tulisan tab interface
+- setelah di enable double klik wlan1  lalu pilih opsi dibawah ini
+mode : jadiin ap bridge
+ssid : nama sesuai yang kalian ingin kan
+setelah itu klik ok atau aply
+-  lalu klik new terminal dan ketikan ini
+ip address add address=(ipmu bebas) interface=wlan1
+- lalu klik ip dan pilih hotspot
+- kemudian pilih dan klik hotspot setup dibawah tab servers dan ikuti langkah dibawah ini :
+hotspot interface: pilih wlan1
+local address of network: isikan ip wlan mu tadi
+address pool to network : itu range nya kek nya jadi isinya ip mu tapi ip range kalo ada 0.0.0.0 nya apus aja yang 0.0.0.0 nya.
+select certificate : none
+ip address of SMTP server: langsung next aja
+dns server : pastikan sama settingan dns server mu sebelumnya
+dns name : isikan sesuka mu
+name of local hostpot user : admin
+password for the user : bebas terserah kalian
+- dan untuk setting hotspot selesai..
+--------------nambah user-------------
+- masih di ip-hotspot kita ke tab user profile lalu klik add ( + ) lalu ikuti langkah dibwah ini
+name : terserah kalian
+shared user : terserah kalian
+rate limit : terserah kalian disini saya mengambil contoh 512k/1024k
+lalu klik ok dan aply
+
+- masih di ip-hotspot lalu ke tab user lalu klik add ( + ) lalu ikuti langkah dibwah ini
+name : terserah kalian
+password terserah kalian 
+profile : profile yang kalian buat tadi
+lalu klik aply atau ok
+
+- masih di ip-hotspot tab server profile lalu double klik hsprof1 dan ikuti langkh dibawah ini
+ke tab login lalu un centang cookie
+lalu klik ok atau aply
+
+- lalu jadi kan interface wlan menjadi dhcp
+cara nya /ip dhcp-server setup dan jadikan wlan1 sebagai dhcp
+
+
+---------------------------------------------------------------------------bypass user--------------------------------------------------------------------------------
+how to bypass user for hotspot mikrotik
+
+first you must do a setting for ip, gateway, and hostpot
+
+in winbox click ip -> hotspot -> ip binding and click ( + ) add logo and follow the instruction bellow
+
+pastikan user telah connect dan lihat ip nya
+address : -ip client-
+server : hotspot 1
+type : bypassed
+
+lalu ke tab host ikuti langkah ini
+klik kanan ip yang kalian buat tadi lalu pilih make binding dan ikuti ini
+server : hotspot1
+type: bypassed
+
+===merubah tampilan login hotspot mikrotik
+1. pada winbox di bagian pane kiri pilih files lalu arah kan ke folder hotspot
+2. agar bisa mengedit file ya buka windows explorer lalu masukan alamat ini ftp://192.168.3.1 dan login dengan username dan password seperti pada winbox atau hotspot nya
+3. masuk ke folder hotspot. copy semua file nya yang ada dalam folder hotspot tsb
+4. jika sudah edit file html nya (semua file html) menggunakan notepad
+5. pada line 58 cari input kata kata sambutan login nya dan ubah manjadi "selamat datang di Hotspot SMKN SUKOHARJO"
+6. save kemudian copy lagi semua file tadi ke folder hotspot mikrotik nya 
+7. lalu coba login ke hotspot nya, apakah sudah berubah atau belum.
+
+=====blocking site pada hotspot mikrotik=====
+1. pada menu ip > hotspot> userprofile > add (+)
+2. pada menu address list masukan nama yang akan dibuat pada firewall address list misal : socmed
+3. masuk ke menu Firewall > address list dan masukan nama website yang akan diblokir dengan nama grup pada saat kita memasukan nama address list pada user profile hotspot
+4. kemudian masuk ke menu Firewall > Filter Rules > add (+) keterangan : pada chain=forward pada  advanced=socmed pada action=jump
+5. masuk ke firewall > filter rules > add (+)
+keterangan pada chain=socmed pada advanced=socmed pada action=drop
+6. lalu buat user dengan user profile tadi.
+
+====bloking file pada hotspot mikrotik====

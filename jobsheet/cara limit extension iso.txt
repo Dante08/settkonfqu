@@ -1,0 +1,20 @@
+membuat layer7-protocol
+ip > firewall > layer7-protocol > add ( + )
+name : iso
+Regexp : \.(iso)
+
+membuat mangle nya
+ip > firewall > mangle > add (+)
+chain : prerouting
+action : mark Packet
+new mark packet : iso
+passthroungt : uncentang
+
+membuat queque tree untuk melimit
+queque > queque tree > add (+)
+name : terserah
+parent : global
+packet mark : iso
+limit at : misal 10k
+nax limit : 64k
+
