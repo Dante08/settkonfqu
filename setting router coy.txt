@@ -15,7 +15,7 @@ ip proxy access add comment= (kata kamu) action= deny (yang ini bedasarkan kata)
 ip firewall nat add chain=dstnat dst-port= 80 action= redirect to-port=8080 protcol=tcp
 
 - block situs layer 7
-
+regexp for layer7 (blocking site https ) gui version : ^.+(facebook.com).*$
 dropketikan ini
 cookies nya INGAT!! hpus dulu
 /ip firewall layer7-protcol
