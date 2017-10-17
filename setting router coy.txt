@@ -12,10 +12,12 @@ ip proxy set enabled=yes
 ip proxy set cache-administrator= (bebas) port=8080
 ip proxy access add dst-host= (domain yang ingin kamu blok) action= deny (yang ini web)
 ip proxy access add comment= (kata kamu) action= deny (yang ini bedasarkan kata)
+#for blocked file using proxy
+ip proxy access add path="*.mp3" action=deny src-address=(your ip output or ip on your client)
 ip firewall nat add chain=dstnat dst-port= 80 action= redirect to-port=8080 protcol=tcp
 
 - block situs layer 7
-regexp for layer7 (blocking site https ) gui version : ^.+(facebook.com).*$
+#recomendedguys  > regexp for layer7 (blocking site https ) gui version : ^.+(facebook.com).*$
 dropketikan ini
 cookies nya INGAT!! hpus dulu
 /ip firewall layer7-protcol
