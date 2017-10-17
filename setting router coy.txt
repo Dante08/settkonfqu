@@ -1,0 +1,35 @@
+- setting router
+install dulu mikrotiknya
+lalu ikuti step di bawah ini
+- ip address add address=192.168.1.34/24 interface=ether1
+- ip address add address=200.200.200.1/24 interface=ether2
+- ip dns set servers=8.8.8.8,8.8.4.4 allow-remote-requests=yes
+- ip route add gateway=192.168.1.1
+- ip firewall nat add chain=srcnat action=masquerade
+lakukan ping di router dan di cmd piece of shit
+- setting proxy / bloking situs
+ip proxy set enabled=yes
+ip proxy set cache-administrator= (bebas) port=8080
+ip proxy access add dst-host= (domain yang ingin kamu blok) action= deny (yang ini web)
+ip proxy access add comment= (kata kamu) action= deny (yang ini bedasarkan kata)
+ip firewall nat add chain=dstnat dst-port= 80 action= redirect to-port=8080 protcol=tcp
+
+- block situs layer 7
+
+dropketikan ini
+cookies nya INGAT!! hpus dulu
+/ip firewall layer7-protcol
+add name= (situs https ex. dropbox.com) regexp="^.+(dropbox.com).*\$"
+/
+/ip firewall filter
+add action=drop chain=forward layer7-protocol=dropbox.com src-address=(network keluaran atau outputmu)
+
+lalu test apakah terblock atau tidak dengan cara membuka situs yang di maksud.
+
+- dhcp server
+ketik / ip dhcp-server setup
+
+link test buat download mikrotik
+http://www.routeros.co.id/?act=preview&versi=6.33&nf=mikrotik-6.33.iso&key=9d8d81f60c61c94c09d78be766c21a76
+
+	
