@@ -1,0 +1,93 @@
+catatan mikrotik ku
+cara konfigurasi gateway
+1. jika input melalui wlan1 maka sepert ini
+a. enable wlan1 di interface
+b. lalu ke wireless yg berada pada bawah menu interface dan klik pada security profiles
+c. klik add (+) lalu ikuti langkah ini
+- name : basing
+- authenticaition type : (tergantung keamanan wifi nya kalo misal WPA2 PSK ya centang WPA2 PSK saja)
+- WPA2 Pre-shared key: isikan password wifi nya
+- lalu klik apply dan oke
+d. kembali ke interface double klik wlan1
+e. lalu ikut langkah ini
+- di tab wireless mode : station
+- klik scan.... 
+- klik start tunggu hingga muncul nama nama wifinya
+- jika muncul, klik nama wifi yng ingin anda ambil untuk jadiin input lalu klik connect
+- lalu jika sudah pada security profile pilih yg telah anda buat tadi
+- jika sudah klik apply dan oke
+f. lalu ke terminal ketikan ini
+ip address add address=ip sesuai alamat wifi / hotspot misal hotspot saya 192.168.43.2/24 interface=wlan1
+ip address add address=ip buat kita misal 10.10.10.1/30 interface=ether2
+ip firewall nat add chain=srcnat action=masquerade
+ip dns set server=8.8.8.8,8.8.4.4. allow-remote-request=yes
+ip route add gateway=ip hotspot td misal 192.168.43.1 (cara ngecek nya dari android pakek termux terus ketik ifconfig dan liat bagian wlan0)
+2. kalo pake kabel atau ether1
+ip address add address=ip sesuai alamat dari isp misal 192.168.43.2/24 interface=ether1
+ip address add address=ip buat kita misal 10.10.10.1/30 interface=ether2
+ip firewall nat add chain=srcnat action=masquerade
+ip dns set server=8.8.8.8,8.8.4.4. allow-remote-request=yes
+ip route add gateway=ip isp misal 192.168.43.1 
+3. memblokir dan mengalihkan situs menggunakan web proxy
+diterminal ketikan
+ip proxy set enabled=yes
+ip proxy set cache-administrator=dante port=8080
+ip proxy access add dst-host=detik.com redirect-to="wandapcguide.blogspot.com" action=deny src-address=ip outputmu misal 10.10.10.2
+ip firewall nat add chain=dstnat dst-port=80 action=redirect to-ports=8080 protocol=tcp
+4. limit dengan queue tree
+4a. membuat mangel 1
+- ke ip > firewall > mangel > klik add (+)
+- ikuti langkah ini
+chain : forward 
+src. Address: 10.10.10.0/30 untuk mewakili seluruh ip di ether2 atau ether mana saja 
+action : mark connection
+new connection mark : user 1
+passtrought centang
+4b. membuat mangel 2
+chain : forward 
+connection mark : user1 
+action : mark packet
+new packet mark : to-user1
+passtrought centang
+4c. membuat queue upload
+name : up
+parent : input mu jadi kalo input dari wifi ya wlan1 kalo isp ya ether1
+packet marks : to-user1
+max limit : 256k
+4d. membuat queue download
+name : download
+parent : output mu atau pc mu sekarang nyolok di port ether berapa misal sekarang lagi di ether2 ya ether2
+packet marks : to-user1
+max limit : 512k
+
+5. dhcp
+ip dhcp-server setup inget pool ny ya nda..
+
+6. limit ekstensi
+a. regexp (ip > firewall > layer7protocol)
+iso : ^.*get.+\.iso.*$	bisa juga \.(iso)
+exe : ^.*get.+\.exe.*$
+zip : ^.*get.+\.zip.*$
+
+b. mangle (ip > firewall > mangle)
+untuk mangel ini baik yang iso dan exe atau lainnya sama saja
+- mangle pertama
+chain : prerouting
+src : ip mu tepat nya ip dari ether mana yang ingin kamu limit
+layer7protocol : regexp yang kamu buat tadi
+action : mark connection
+new connection mark : (disini saya ambil mau ngelimit exe jadi ya) exe
+passtrought : centang
+
+- mangle kedua
+chain : prerouting
+connection mark : new connection mark mu yang tadi kamu buat di mangle pertama
+action : mark packet
+new packet mark : (disini saya ambil mau ngelimit exe jadi ya) to-exe
+passtrought : centang
+
+c. queue buat limiter kita pake queue tree (queues > queue tree)
+name : terserah
+parent : global (masih kita fix sama sama  hehe pakek aja ini dulu)
+packet marks : dari new packet mark yang kita buat tadi di mangle kedua
+max limit : 128k
